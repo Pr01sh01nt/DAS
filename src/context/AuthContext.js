@@ -12,14 +12,16 @@ import {
     getAuth
 
 } from "firebase/auth";
-import { auth } from '../lib/firebase/config';
+import { auth, db } from '../lib/firebase/config';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 const AuthContext = createContext("");
 
 
 export const AuthContextProvider = ({ children }) => {
-    const [user, setUser] = useState({isLoading:true});
+    const [user, setUser] = useState({});
+    const [role, setRole] = useState(null);
     const isLoading = useRef(true);
     console.log(auth.currentUser , "from auth ");
     // const auth = getAuth();
@@ -29,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const googleSignIn = async() => {
 
-      console.log("signin with google")
+      console.log("signin with google");
       isLoading.current = true;
       try{
         
@@ -37,11 +39,15 @@ export const AuthContextProvider = ({ children }) => {
        
         
         await signInWithPopup(auth, provider);
+        isLoading.current = false;
 
+        
       }catch(err){
         isLoading.current = false;
         console.log(err)}
-
+        
+        
+        return auth.currentUser;
 
     };
 
@@ -50,23 +56,34 @@ export const AuthContextProvider = ({ children }) => {
         isLoading.current = true;
     };
 
-    function hello(){
-      console.log("cleanrer hello runs")
-    }
 
     useEffect(() => {
 
       console.log("is user changed ", typeof(onAuthStateChanged));
-      const unsubscribee = onAuthStateChanged(auth, (currentUser) => {
+      const unsubscribee = onAuthStateChanged(auth, async(currentUser) => {
+
+        try{
         console.log("irun")
-        isLoading.current = false;
-        setUser(currentUser);
+        if(currentUser)
+        {
+          const data = await getDoc(doc(db, "users",currentUser.uid ));
+          console.log(data.data(), "user data");
+          setRole(data.data().role);
+        }
+           
+      }catch(err)
+      { 
+        
+        console.error(err);
+      }
+      isLoading.current = false;
+      setUser(currentUser);
+
       });
-      // console.log(unsubscribee);
-      // const unsubscribee = hello();
+      
       return () =>{ 
-        console.log("hey , cleaner now runs ");
-        // console.log("HE");
+        console.log("hey , cleaner now runs  ");      
+     
         unsubscribee();
         
         };
@@ -85,7 +102,7 @@ export const AuthContextProvider = ({ children }) => {
       return (
         <>
         
-        <AuthContext.Provider value={{ user, googleSignIn, logOut, signUp, signIn, isLoading }}>
+        <AuthContext.Provider value={{ user, googleSignIn, logOut, signUp, signIn, isLoading , role, setRole}}>
           {children}
           {console.log("first")}
         </AuthContext.Provider>

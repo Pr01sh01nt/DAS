@@ -16,16 +16,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { UserAuth } from '@/context/AuthContext';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar({navigate}) {
+function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const {user, isLoading} = UserAuth();
+  const navigate = useRouter();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -44,7 +45,7 @@ function ResponsiveAppBar({navigate}) {
 
 
   const handleLoginSignUp = ()=>{
-    // navigate.push("/role");
+    navigate.push("/role");
   }
 
   return (
@@ -174,9 +175,9 @@ function ResponsiveAppBar({navigate}) {
             </>
               :
               <>
-              <Link href="/role">
+          
               <Button variant="contained" color='secondary' onClick={handleLoginSignUp}>Login / SignUp</Button >
-              </Link>
+           
                </>
               
               }

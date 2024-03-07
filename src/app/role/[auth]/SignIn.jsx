@@ -8,7 +8,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import Image from 'next/image';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+import { UserAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 
 function Copyright(props) {
@@ -27,20 +31,79 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 
-export default function SignIn({ setSignIn , role}) {
-        
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+export default function SignIn({ setSignIn, role }) {
+
+    const { user, googleSignIn, signIn, setRole } = UserAuth();
+    const navigate = useRouter();
+
+    const handleSubmit = async (event) => {
+
+        try {
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            console.log({
+                email: data.get('email'),
+                password: data.get('password'),
+            });
+
+            await signIn(data.get('email'), data.get('password'));
+
+
+            navigate.push("/");
+       
+
+        } catch (err) {
+            console.error(err);
+        }
+
     };
+
+    const handleGoogleLogin = async () => {
+        try {
+            const result = await googleSignIn();
+            console.log(result, user, "google singin");
+            if (!result) throw Error("login failed");
+
+
+            if (Date.now() - result.metadata.createdAt <= 10000)  // if data created in less than 10s means it has to be saved in firestore
+            {
+
+                const data = await getDoc(doc(db, "users", result.uid));  // make sure no one can change its role once its role is set with same email
+
+                if (!data.data()) {
+                    await setDoc(doc(db, "users", result.uid), {
+                        username: result.displayName,
+                        email: result.email,
+                        role: role
+                    });
+                }
+                else if (data.data().role !== role) throw Error("signin failed");
+            }
+
+            navigate.push("/",{role:role});
+            // setRole(role);
+            // await user.reload();
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            signin with Google
+
+            <Image
+                src="/GoogleIcon.png "
+                width={50}
+                height={50}
+                quality={50}
+                alt="Login with Google"
+                onClick={handleGoogleLogin}
+                className="cursor-pointer"
+
+
+            />
+
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box

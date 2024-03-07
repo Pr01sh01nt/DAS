@@ -10,13 +10,21 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import GoogleIcon from '@mui/icons-material/Google';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+import { UserAuth } from '@/context/AuthContext';
+import { sendEmailVerification, updateProfile } from 'firebase/auth';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-       Website
-     {' '}
+      Website
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -26,23 +34,100 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp({setSignIn, role}) {
+export default function SignUp({ setSignIn, role }) {
+  const { user, signUp, googleSignIn, setRole } = UserAuth();
+  const navigate = useRouter();
 
 
+  const handleSubmit = async (event) => {
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(event.currentTarget, "$$");
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      event.preventDefault();
+      console.log(event.currentTarget, "$$");
+      const data = new FormData(event.currentTarget);
+
+      console.log({
+        email: data.get('email'),
+        password: data.get('password'),
+      });
+
+      // signUp with email and password
+      const result = await signUp(data.get('email'), data.get('password'));
+      console.log(result, "sign up result");
+
+
+      await updateProfile(result.user, {
+        displayName: `${data.get('firstName')} ${data.get('lastName')}`,
+
+      });
+
+      await setDoc(doc(db, "users", result.user.uid), {
+        username: `${data.get('firstName')} ${data.get('lastName')}`,
+        email: data.get('email'),
+        role: role
+      });
+
+      await sendEmailVerification(result.user);
+      
+      
+      navigate.push("/");
+      // await user.reload();
+      // setRole(role);
+
+    } catch (err) {
+      console.error(err);
+    }
+
   };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await googleSignIn();
+      console.log(result, user, "google singin");
+      
+      if(!result)throw Error("login failed");
+     
+      
+      if (Date.now() - result.metadata.createdAt <= 10000)  // if data created in less than 10s means it has to be saved in firestore
+      {
+
+          const data = await getDoc(doc(db, "users", result.uid));  // make sure no one can change its role once its role is set with same email
+
+          if (!data.data() ) {
+              await setDoc(doc(db, "users", result.uid), {
+                  username: result.displayName,
+                  email: result.email,
+                  role: role
+              });
+          }
+          else if(data.data().role !== role)throw Error("signin failed");
+      }
+
+
+      navigate.push("/");
+      // setRole(role);
+      // await user.reload();
+      
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      signup with Google
+
+      <Image
+        src="/GoogleIcon.png "
+       width={50}
+        height={50}
+        quality={50}
+        alt="Login with Google"
+        onClick={handleGoogleLogin}
+        className="cursor-pointer"
+
+      />
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -103,7 +188,7 @@ export default function SignUp({setSignIn, role}) {
                   autoComplete="new-password"
                 />
               </Grid>
-           
+
             </Grid>
             <Button
               type="submit"
@@ -114,12 +199,12 @@ export default function SignUp({setSignIn, role}) {
               Sign Up
             </Button>
 
-        
-                <Typography  variant="body2" align='center' onClick={()=>{setSignIn(true)}}>
-                  Already have an account? Sign in
-                </Typography>
-         
-         
+
+            <Typography variant="body2" align='center' onClick={() => { setSignIn(true) }}>
+              Already have an account? Sign in
+            </Typography>
+
+
           </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />
