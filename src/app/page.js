@@ -3,9 +3,11 @@
 import { useSearchParams } from "next/navigation";
 import { UserAuth } from "../context/AuthContext";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const {user, isLoading, role} = UserAuth();
+  const navigate = useRouter();
 
   
   console.log("page renders");
@@ -17,17 +19,11 @@ export default function Home() {
   return isLoading.current ? <h1>Loading......</h1> : !user ?
 
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      
-        < button onClick = {()=>{googleSignIn()}}>sign in with google</button>
-        < button onClick = {()=>{logOut()}}>Logout</button>
+      hero page
     
     </main>
     
     :
-    <main className="min-h-screen ">
-    <h1>Home page : {role}</h1>
-    
-    < button onClick = {()=>{logOut()}}>Logout</button>
-    </main>
+    navigate.replace(`/${role}`);
  
 }

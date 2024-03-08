@@ -100,8 +100,6 @@ export default function SignIn({ setSignIn, role }) {
                 alt="Login with Google"
                 onClick={handleGoogleLogin}
                 className="cursor-pointer"
-
-
             />
 
             <Container component="main" maxWidth="xs">
