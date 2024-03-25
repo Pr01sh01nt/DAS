@@ -25,7 +25,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const {user, isLoading} = UserAuth();
+  const {user, isLoading, logOut} = UserAuth();
   const navigate = useRouter();
 
   const handleOpenNavMenu = (event) => {
@@ -39,7 +39,15 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (setting) => {
+
+    console.log(setting);
+
+    if(setting == "Logout")
+    logOut();
+
+
+
     setAnchorElUser(null);
   };
 
@@ -49,7 +57,7 @@ function ResponsiveAppBar() {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar  position='sticky'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -167,7 +175,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={()=>(handleCloseUserMenu(setting))}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

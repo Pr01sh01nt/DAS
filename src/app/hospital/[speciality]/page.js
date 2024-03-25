@@ -1,9 +1,12 @@
 "use client"
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 
 
 export default function Home() {
   
+    
+
     return (
         <>
             <h1>List of all Doctors</h1>

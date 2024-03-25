@@ -26,8 +26,6 @@ export default function Home() {
     const handleListItemClick = (event)=>{
         console.log(event.currentTarget);
 
-
-
     }
 
     return (

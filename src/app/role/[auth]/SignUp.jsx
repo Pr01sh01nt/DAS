@@ -37,7 +37,7 @@ const defaultTheme = createTheme();
 export default function SignUp({ setSignIn, role }) {
   const { user, signUp, googleSignIn, setRole } = UserAuth();
   const navigate = useRouter();
-
+  // console.log("role =>  ", role)
 
   const handleSubmit = async (event) => {
 
@@ -153,7 +153,7 @@ export default function SignUp({ setSignIn, role }) {
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label={`${role[0].toUpperCase() + role.slice(1)} First Name`}
                   autoFocus
                 />
               </Grid>
@@ -162,7 +162,7 @@ export default function SignUp({ setSignIn, role }) {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label={`${role[0].toUpperCase() + role.slice(1)} Last Name`}
                   name="lastName"
                   autoComplete="family-name"
                 />

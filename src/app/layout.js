@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
   console.log("layout renders");
   return (
     <html lang="en">
-      <body className={`${inter.className} border-8 border-cyan-800`}>
+      <body className={`${inter.className} border-cyan-800`}>
       <AuthContextProvider>
 
           <Navbar/>
