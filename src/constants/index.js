@@ -1,5 +1,5 @@
 export const  doctorSpecialties = [
-    "General Practitioner (GP)",
+    "General_Practitioner_(GP)",
     "Pediatrician",
     "Cardiologist",
     "Dermatologist",

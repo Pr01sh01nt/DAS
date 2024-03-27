@@ -10,7 +10,7 @@ import { db } from "@/lib/firebase/config";
 
 
 export default function Home() {
-      const {user} = UserAuth();
+      const { user } = UserAuth();
 
       console.log(user, "hostps;f");
 
@@ -19,15 +19,18 @@ export default function Home() {
             try {
                   event.preventDefault();
                   const data = new FormData(event.currentTarget);
-                  if (data.get('education') === "" || data.get('specialist') === "" || data.get('dob') === " ")
+                  if (data.get('education') === "" || data.get('specialist') === "" || data.get('dob') === "")
                         alert('fill everything');
                   else {
-                        const docRef =  await addDoc(collection(db, "doctors"), {
-                              hospitalName : user.displayName,
-                              doctorName : data.get('doctorName'), 
-                              dob : data.get('dob'),
-                              specialist : data.get('specialist'),
-                              education : data.get('education')
+                        const docRef = await addDoc(collection(db, "doctors"), {
+                              hospitalName: user.displayName,
+                              doctorName: data.get('doctorName'),
+                              dob: data.get('dob'),
+                              specialist: data.get('specialist'),
+                              education: data.get('education'),
+                              location : data.get('location'),
+                            
+                              details : data.get('details'),
 
                         });
 
@@ -45,9 +48,10 @@ export default function Home() {
       const [dob, setDOB] = useState(' ');
 
       const handleChange = (event) => {
-            if (event.target.getAttribute("name") === "specialist")
+            console.log(event.target);
+            if (event.target.name === "specialist")
                   setSpecialist(event.target.value);
-            else if (event.target.getAttribute("name") === "education")
+            else if (event.target.name === "education")
                   setDocEducation(event.target.value);
       };
 
@@ -62,9 +66,9 @@ export default function Home() {
                               margin="normal"
                               name="hospitalName"
                               value={user.displayName || " "}
-                              disabled    
+                              disabled
                               fullWidth
-                        />    
+                        />
                         <TextField
                               type="text"
                               label="Doctor Name"
@@ -83,7 +87,7 @@ export default function Home() {
                               autoFocus
                               required
                               fullWidth
-                              onChange={(event)=>{setDOB(event.target.value)}}
+                              onChange={(event) => { setDOB(event.target.value) }}
                         />
 
                         <InputLabel id="specialist-label">Specialist</InputLabel>
@@ -129,7 +133,31 @@ export default function Home() {
                         </Select>
 
 
+                        <TextField
+                              type="text"
+                              label="Location"
+                              margin="normal"
+                              name="location"
+                              autoFocus
+                              required
+                              fullWidth
+                        />
 
+                  
+                  
+
+                        <TextField
+                              type="text"
+                              label="Deatils"
+                              margin="normal"
+                              name="details"
+                              autoFocus
+                              multiline
+                              fullWidth
+                        />
+
+                        
+                        
                         <Button
                               type="submit"
                               fullWidth
