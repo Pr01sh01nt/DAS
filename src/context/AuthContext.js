@@ -52,8 +52,9 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     const logOut = () => {
-        signOut(auth);
-        isLoading.current = true;
+      isLoading.current = true;
+      signOut(auth);  
+      isLoading.current = false;
     };
 
 
@@ -63,10 +64,13 @@ export const AuthContextProvider = ({ children }) => {
       const unsubscribee = onAuthStateChanged(auth, async(currentUser) => {
 
         try{
-        console.log("irun")
+          console.log("irun")
+          console.log(currentUser);
         if(currentUser)
         {
+          console.log(currentUser.uid);
           const data = await getDoc(doc(db, "users",currentUser.uid ));
+          console.log(data, 'data');
           console.log(data.data(), "user data");
           setRole(data.data().role);
         }

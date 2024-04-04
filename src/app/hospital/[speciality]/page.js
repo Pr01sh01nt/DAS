@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname} from 'next/navigation'
 import { useEffect, useState } from "react";
 import Doctor from "./Doctor";
+import { UserAuth } from "@/context/AuthContext";
 
 
 export default function Home() {
@@ -12,6 +13,8 @@ export default function Home() {
     const pathname = usePathname();
     const [doctors, setDoctors] = useState([]);
     const [state, setState] = useState(null);
+    const {user, isLoading} = UserAuth();
+
     useEffect(() => {
         const q = query(collection(db, "doctors"), where("specialist", "==", pathname.slice(10)));
 
@@ -31,7 +34,7 @@ export default function Home() {
         doc();
     }, [])
 
-    return !state ? 
+    return !isLoading.current ? user ? !state ? 
         <>
             <h1>List of all Doctors</h1>
             have filters for speciality, fees
@@ -45,5 +48,8 @@ export default function Home() {
         <>
         <Doctor state =  {state}/>
         </>
+        :
+        <h1>Login First</h1>
+        : <h1>Loading.......</h1>
 
 }

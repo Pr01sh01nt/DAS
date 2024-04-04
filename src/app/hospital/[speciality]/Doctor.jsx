@@ -1,107 +1,152 @@
+import AppointmentList from '@/components/AppointmentList';
 import { db } from '@/lib/firebase/config';
-import { Avatar, Box, Button, TextField } from '@mui/material'
+import { Avatar, Box, Button, TextField, Typography } from '@mui/material'
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react'
 
 const Doctor = ({ state }) => {
-    const [time, setTime] = useState({startTime:" ", endTime:" "});
+    const [time, setTime] = useState({ startTime: " ", endTime: " " });
 
-    console.log(state , "state");
-    const handleSubmit = async(event)=>{
+    console.log(state, "state");
+    const handleSubmit = async (event) => {
 
-        try{
+        try {
             event.preventDefault();
-    
+
             const data = new FormData(event.currentTarget);
-            if (data.get('startTime') === "" || data.get("endTime") === "")
-            {
+            if (data.get('startTime') === "" || data.get("endTime") === "") {
                 alert('fill everything');
                 throw new Error("Provide Start Time and End Time");
             }
-            else
-            {
+            else {
                 const docRef = await addDoc(collection(db, "appointments"), {
-                    id : state.id,
-                    startTime : data.get('startTime'),
-                    endTime : data.get('endTime'),
-                    fee : data.get('fee'),
-                    patientCount : data.get('patientCount'),
+                    id: state.id,
+                    startTime: data.get('startTime'),
+                    endTime: data.get('endTime'),
+                    fee: data.get('fee'),
+                    patientCount: data.get('patientCount'),
+                    fixPatientCount: data.get('patientCount'),
                     
+
                 });
                 console.log(docRef, "saved");
 
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
-        
+
     }
 
     return (
         <>
-            
-            <Avatar
-                alt="avatar"
-                sx={{width : 100, height : 100}}
-            >Hello</Avatar>
 
-            doctor details(dob, education, name, details)
+            <Box
+                component="div"
+                className="flex justify-around flex-col md:flex-row items-center md:items-start"
 
-
-            Appointment details
-            <Box component="form" className="flex flex-col  justify-between" onSubmit = {handleSubmit}>
-                <TextField
-                    type="time"
-                    label="Start Time"
-                    value={time.startTime}
-                    variant="outlined"
-                    className='m-2'
-                    name = "startTime"
-                    onChange = {(e)=>{setTime({...time, startTime : e.target.value})}}
-
-                />
-                <TextField
-                    type="time"
-                    label="End Time"
-                    value={time.endTime}
-                    variant="outlined"
-                    className='m-2'
-                    name = "endTime"
-                    onChange = {(e)=>{setTime({...time, endTime : e.target.value})}}
-
-                />
-
-                <TextField
-                    type="number"
-                    label="Fee(in Rs)"
-                    variant="outlined"
-                    className='m-2'
-                    name = "fee"
-                    required
-
-
-                />
-                <TextField
-                    type="number"
-                    label="Patient Count"
-                    variant="outlined"
-                    className='m-2'
-                    name = "patientCount"
-                    required
-
-                />
-
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    className="bg-[rgb(167,190,80)]"
+            >
+                <Box
+                    component="div"
+                    className="w-[48%]"
                 >
-                    Submit
-                </Button>
 
+
+
+                    <Box
+                        component="div"
+                        className='flex justify-center mt-5'
+                    >
+                        <Avatar
+                            alt="avatar"
+                            sx={{ width: 100, height: 100 }}
+                            src =  {state.imageURL}
+                        />
+                    </Box>
+                    doctor details(dob, education, name, details)
+
+                    
+
+                </Box>
+
+                <Box
+
+                    component="div"
+                    className="w-[48%] mt-5 flex flex-col items-center"
+                >
+                    <Typography
+                        variant="h5"
+                        component="h5"
+                        align='center'
+                    >
+
+                       New Appointment Details
+                    </Typography>
+                    <Box
+                        component="form"
+                        className="flex flex-col  justify-between min-w-[320px] sm:min-w-[410px]"
+                        onSubmit={handleSubmit}
+                    >
+                        <TextField
+                            type="time"
+                            label="Start Time"
+                            value={time.startTime}
+                            variant="outlined"
+                            className='m-2'
+                            name="startTime"
+                            onChange={(e) => { setTime({ ...time, startTime: e.target.value }) }}
+
+                        />
+                        <TextField
+                            type="time"
+                            label="End Time"
+                            value={time.endTime}
+                            variant="outlined"
+                            className='m-2'
+                            name="endTime"
+                            onChange={(e) => { setTime({ ...time, endTime: e.target.value }) }}
+
+                        />
+
+                        <TextField
+                            type="number"
+                            label="Fee(in Rs)"
+                            variant="outlined"
+                            className='m-2'
+                            name="fee"
+                            required
+
+
+                        />
+                        <TextField
+                            type="number"
+                            label="Patient Count"
+                            variant="outlined"
+                            className='m-2'
+                            name="patientCount"
+                            required
+
+                        />
+
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            className="bg-[rgb(167,190,80)]"
+                        >
+                            Submit
+                        </Button>
+
+                    </Box>
+                </Box>
             </Box>
+
+           
+           <Box className = "flex justify-center">
+
+            <AppointmentList id={state.id}/>
+           </Box>
         </>
     )
 }

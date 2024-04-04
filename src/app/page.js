@@ -37,5 +37,6 @@ export default function Home() {
 
     :
     navigate.replace(`/${role}`);
+    // <h1>hey</h1>
 
 }

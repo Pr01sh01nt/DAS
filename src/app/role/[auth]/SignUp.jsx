@@ -12,11 +12,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import GoogleIcon from '@mui/icons-material/Google';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { db, storage } from '@/lib/firebase/config';
 import { UserAuth } from '@/context/AuthContext';
 import { sendEmailVerification, updateProfile } from 'firebase/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 
 function Copyright(props) {
@@ -52,30 +53,79 @@ export default function SignUp({ setSignIn, role }) {
       });
 
       // signUp with email and password
+      console.log("signup with email and password runs");
       const result = await signUp(data.get('email'), data.get('password'));
       console.log(result, "sign up result");
 
 
+      console.log("upadate profile display name runs");
       await updateProfile(result.user, {
         displayName: `${data.get('firstName')} ${data.get('lastName')}`,
 
       });
 
-      await setDoc(doc(db, "users", result.user.uid), {
-        username: `${data.get('firstName')} ${data.get('lastName')}`,
-        email: data.get('email'),
-        role: role
-      });
+      console.log(data.get('displayImage') , "profileImage");
 
-      await sendEmailVerification(result.user);
-      
-      
-      navigate.push("/");
+      console.log('preparing for storaing profile image');
+      const storageRef = ref(storage, `image/${Date.now()}`);
+      const uploadTask = uploadBytesResumable(storageRef, data.get('displayImage'));
+
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          console.log('Upload is ' + progress + '% done');
+          // setProgressUpload(progress) // to show progress upload
+
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused')
+              break
+            case 'running':
+              console.log('Upload is running')
+              break
+          }
+        },
+        (error) => {
+          message.error(error.message)
+        },
+        async () => {
+          await getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+            //url is download url of file
+            // setDownloadURL(url)
+            console.log(url);
+
+
+            await setDoc(doc(db, "users", result.user.uid), {
+              username: `${data.get('firstName')} ${data.get('lastName')}`,
+              email: data.get('email'),
+              role: role,
+              imageURL: url,
+              location : data.get('location'),
+            });
+
+            console.log("navigate push going to run");
+            navigate.push(`/${role}`);
+            
+            console.log("sending mail");
+            await sendEmailVerification(result.user);
+            console.log("mail sent");
+            
+
+          })
+        },
+      )
+
+
+
+
       // await user.reload();
       // setRole(role);
 
     } catch (err) {
       console.error(err);
+      alert('error occured');
     }
 
   };
@@ -84,30 +134,38 @@ export default function SignUp({ setSignIn, role }) {
     try {
       const result = await googleSignIn();
       console.log(result, user, "google singin");
-      
-      if(!result)throw Error("login failed");
-     
-      
+
+      if (!result) throw Error("login failed");
+
+
       if (Date.now() - result.metadata.createdAt <= 10000)  // if data created in less than 10s means it has to be saved in firestore
       {
 
-          const data = await getDoc(doc(db, "users", result.uid));  // make sure no one can change its role once its role is set with same email
+        const data = await getDoc(doc(db, "users", result.uid));  // make sure no one can change its role once its role is set with same email
 
-          if (!data.data() ) {
-              await setDoc(doc(db, "users", result.uid), {
-                  username: result.displayName,
-                  email: result.email,
-                  role: role
-              });
-          }
-          else if(data.data().role !== role)throw Error("signin failed");
+        let location= null;
+        if(role === "hospital") 
+        {
+           location = prompt("Enter Location of hospital");
+
+        }
+        if (!data.data()) {
+          await setDoc(doc(db, "users", result.uid), {
+            username: result.displayName,
+            email: result.email,
+            role: role,
+            imageURL: result.photoURL,
+            location : location,
+          });
+        }
+        else if (data.data().role !== role) throw Error("signin failed");
       }
 
 
       navigate.push("/");
       // setRole(role);
       // await user.reload();
-      
+
 
     } catch (err) {
       console.error(err);
@@ -119,7 +177,7 @@ export default function SignUp({ setSignIn, role }) {
 
       <Image
         src="/GoogleIcon.png "
-       width={50}
+        width={50}
         height={50}
         quality={50}
         alt="Login with Google"
@@ -185,11 +243,42 @@ export default function SignUp({ setSignIn, role }) {
                   label="Password"
                   type="password"
                   id="password"
-                  autoComplete="new-password"
                 />
               </Grid>
 
+              {role === "hospital" && 
+              
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="location"
+                  label="Hospital Location"
+                  type="text"
+                  id="location"
+                />
+              </Grid>
+              
+              }
+
+
+
+              <Grid item xs={12}>
+                <TextField
+                  // required
+                  fullWidth
+                  name="displayImage"
+                  type="file"
+                  id="displayImage"
+                />
+
+              </Grid>
+
+
             </Grid>
+
+
+
             <Button
               type="submit"
               fullWidth

@@ -70,11 +70,20 @@ export default function SignIn({ setSignIn, role }) {
 
                 const data = await getDoc(doc(db, "users", result.uid));  // make sure no one can change its role once its role is set with same email
 
+
+                let location= null;
+                if(role === "hospital") 
+                {
+                   location = prompt("Enter Location of hospital");
+                }
+
                 if (!data.data()) {
                     await setDoc(doc(db, "users", result.uid), {
                         username: result.displayName,
                         email: result.email,
-                        role: role
+                        role: role,
+                        imageURL : result.photoURL,
+                        location : location,
                     });
                 }
                 else if (data.data().role !== role) throw Error("signin failed");
