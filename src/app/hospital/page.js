@@ -9,14 +9,14 @@ import { UserAuth } from "@/context/AuthContext";
 
 export default function Home() {
       const navigate = useRouter();
-      const { user, isLoading , role} = UserAuth();
+      const { user, isLoading, role } = UserAuth();
 
       const handleClick = (event) => {
             // console.log(event.currentTarget.getAttribute("name"), "handle it");
             navigate.push(`/hospital/${event.currentTarget.getAttribute("name")}`);
       }
 
-      return  !isLoading.current ? role === "hospital" ? user ?
+      return !isLoading.current ? role === "hospital" ? user ?
             <>
 
 
@@ -24,6 +24,7 @@ export default function Home() {
                   <div className="border-2 flex flex-wrap justify-around max-w-full">
 
                         {doctorSpecialties.map(specialist => <div
+                              key={specialist.type}
                               className=" border-2 w-[300px] m-2 border-black cursor-pointer rounded p-2 max-w-[300px]"
                               onClick={handleClick}
                               name={specialist.type}
@@ -57,7 +58,7 @@ export default function Home() {
 
             </>
             : <h1>Login First</h1>
-            :<h1>you have not login with hospital , make login with client</h1>
+            : <h1>you have not login with hospital , make login with client</h1>
             : <h1>Loading........</h1>
 
 }

@@ -12,6 +12,10 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 export default function Home() {
       const { user, isLoading } = UserAuth();
+      
+      const [specialist, setSpecialist] = useState('');
+      const [docEducation, setDocEducation] = useState('');
+      const [dob, setDOB] = useState(' ');
 
       // console.log(user, "hostpf");
 
@@ -89,9 +93,6 @@ export default function Home() {
 
       };
 
-      const [specialist, setSpecialist] = useState('');
-      const [docEducation, setDocEducation] = useState('');
-      const [dob, setDOB] = useState(' ');
 
       const handleChange = (event) => {
             // console.log(event.target);
@@ -169,7 +170,7 @@ export default function Home() {
                                           <em>None</em>
                                     </MenuItem>
                                     {doctorSpecialties.map(speciality =>
-                                          <MenuItem value={speciality.type}>{speciality.type}</MenuItem>
+                                          <MenuItem key={speciality.type} value={speciality.type}>{speciality.type}</MenuItem>
 
                                     )}
 
@@ -191,7 +192,7 @@ export default function Home() {
                                           <em>None</em>
                                     </MenuItem>
                                     {doctorEducation.map(education =>
-                                          <MenuItem value={education}>{education}</MenuItem>
+                                          <MenuItem key={education} value={education}>{education}</MenuItem>
 
                                     )}
 

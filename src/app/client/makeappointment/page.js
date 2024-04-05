@@ -16,7 +16,7 @@ const Demo = styled('div')(({ theme }) => ({
 
 
 
-const makeAppointment = () => {
+const MakeAppointment = () => {
 
 
     const navigate = useRouter();
@@ -119,4 +119,4 @@ const makeAppointment = () => {
   )
 }
 
-export default makeAppointment
+export default MakeAppointment

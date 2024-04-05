@@ -36,10 +36,8 @@ export default function Home() {
 
     return !isLoading.current ? user ? !state ? 
         <>
-            <h1>List of all Doctors</h1>
-            have filters for speciality, fees
-            {"         " + pathname.slice(10)}
-            {doctors?.map((doctor) => <h1 onClick = {()=>{setState(doctor)}} >
+        
+            {doctors?.map((doctor) => <h1 key={doctor.id} onClick = {()=>{setState(doctor)}} >
                 {doctor.doctorName}
             
             </h1 >)}
