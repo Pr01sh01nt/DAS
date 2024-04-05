@@ -27,7 +27,7 @@ const AppointmentList = ({ id }) => {
 
 
             setAppointments(sdata);
-            console.log("-_______________________-", querySnapshot.docs, sdata);
+            // console.log("-__-",  sdata);
         }
         doc();
 
@@ -39,14 +39,14 @@ const AppointmentList = ({ id }) => {
         await updateDoc(doc(db,"appointments", docID), {
             patientCount: fixPatientCount,
           });
-        console.log("reset done");
+        // console.log("reset done");
      
         
     }
 
     const handleDelete = async(docID)=>{
         await deleteDoc(doc(db, "appointments", docID));
-        console.log("deleted");
+        // console.log("deleted");
     }
 
     return (

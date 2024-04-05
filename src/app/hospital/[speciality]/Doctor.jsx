@@ -3,11 +3,12 @@ import { db } from '@/lib/firebase/config';
 import { Avatar, Box, Button, TextField, Typography } from '@mui/material'
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react'
+import axios from 'axios';
 
 const Doctor = ({ state }) => {
     const [time, setTime] = useState({ startTime: " ", endTime: " " });
 
-    console.log(state, "state");
+    // console.log(state, "state");
     const handleSubmit = async (event) => {
 
         try {
@@ -19,6 +20,27 @@ const Doctor = ({ state }) => {
                 throw new Error("Provide Start Time and End Time");
             }
             else {
+                
+                // creating product in stripe
+                // console.log("creating product in stripe");
+                const res = await axios("/api/hospital", {
+                    params:{
+                        name: state.doctorName,
+                        amount: data.get('fee'), 
+                    }
+                });
+                // console.log(res.data , "responses from stripe");
+                
+                // creating payment link
+                // console.log("creating payment link");
+                const paymentLinkRes = await axios("/api/hospital/genratePaymentLink",{
+                    params:{
+                        priceId : res.data,
+                    }
+                });
+                // console.log(paymentLinkRes.data);
+
+                // saving to firestore
                 const docRef = await addDoc(collection(db, "appointments"), {
                     id: state.id,
                     startTime: data.get('startTime'),
@@ -26,14 +48,18 @@ const Doctor = ({ state }) => {
                     fee: data.get('fee'),
                     patientCount: data.get('patientCount'),
                     fixPatientCount: data.get('patientCount'),
+                    paymentLink : paymentLinkRes.data
+                    
                     
 
                 });
-                console.log(docRef, "saved");
+
+                // console.log(docRef, "saved");
+                
 
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
 
     }

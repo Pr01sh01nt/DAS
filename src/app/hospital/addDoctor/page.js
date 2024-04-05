@@ -13,7 +13,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 export default function Home() {
       const { user, isLoading } = UserAuth();
 
-      console.log(user, "hostps;f");
+      // console.log(user, "hostpf");
 
       const handleSubmit = async (event) => {
 
@@ -68,7 +68,7 @@ export default function Home() {
                         
                                           });
                         
-                                          console.log("Document written with ID: ", docRef.id);
+                                          // console.log("Document written with ID: ", docRef.id);
 
                                     })
                               },
@@ -94,7 +94,7 @@ export default function Home() {
       const [dob, setDOB] = useState(' ');
 
       const handleChange = (event) => {
-            console.log(event.target);
+            // console.log(event.target);
             if (event.target.name === "specialist")
                   setSpecialist(event.target.value);
             else if (event.target.name === "education")

@@ -23,15 +23,15 @@ export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState({});
     const [role, setRole] = useState(null);
     const isLoading = useRef(true);
-    console.log(auth.currentUser , "from auth ");
+    // console.log(auth.currentUser , "from auth ");
     // const auth = getAuth();
 
-    console.log("render context");  
+    // console.log("render context");  
     // console.log(auth, "hjshj");
 
     const googleSignIn = async() => {
 
-      console.log("signin with google");
+      // console.log("signin with google");
       isLoading.current = true;
       try{
         
@@ -44,7 +44,7 @@ export const AuthContextProvider = ({ children }) => {
         
       }catch(err){
         isLoading.current = false;
-        console.log(err)}
+        console.error(err)}
         
         
         return auth.currentUser;
@@ -60,18 +60,18 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
 
-      console.log("is user changed ", typeof(onAuthStateChanged));
+      // console.log("is user changed ", typeof(onAuthStateChanged));
       const unsubscribee = onAuthStateChanged(auth, async(currentUser) => {
 
         try{
-          console.log("irun")
-          console.log(currentUser);
+          // console.log("irun")
+          // console.log(currentUser);
         if(currentUser)
         {
-          console.log(currentUser.uid);
+          // console.log(currentUser.uid);
           const data = await getDoc(doc(db, "users",currentUser.uid ));
-          console.log(data, 'data');
-          console.log(data.data(), "user data");
+          // console.log(data, 'data');
+          // console.log(data.data(), "user data");
           setRole(data.data().role);
         }
            
@@ -86,7 +86,7 @@ export const AuthContextProvider = ({ children }) => {
       });
       
       return () =>{ 
-        console.log("hey , cleaner now runs  ");      
+        // console.log("hey , cleaner now runs  ");      
      
         unsubscribee();
         
@@ -108,9 +108,9 @@ export const AuthContextProvider = ({ children }) => {
         
         <AuthContext.Provider value={{ user, googleSignIn, logOut, signUp, signIn, isLoading , role, setRole}}>
           {children}
-          {console.log("first")}
+
         </AuthContext.Provider>
-          {console.log("second")}
+
         </>
       );
 

@@ -19,8 +19,8 @@ import { UserAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Home'];
+const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -31,25 +31,38 @@ function ResponsiveAppBar() {
   
 
   const handleOpenNavMenu = (event) => {
+    
     setAnchorElNav(event.currentTarget);
+    
+    
+
+
+
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (event) => {
+
+    // console.log(event.target.name);
+    if(event.target.name === "home")
+       navigate.push("/");  
+    
     setAnchorElNav(null);
+
+
   };
 
   const handleCloseUserMenu = (setting) => {
 
-    console.log(setting);
+    // console.log(setting);
 
     if(setting == "Logout")
     {
 
       navigate.push("/");
-      console.log("navigate.push");
+      // console.log("navigate.push");
       logOut();
       
     }
@@ -68,25 +81,12 @@ function ResponsiveAppBar() {
     <AppBar  position='sticky'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
-
+        
+    
+       
+          <img src="/assests/DAS_logo.png" alt="Logo" className='w-[40px] xs:flex hidden'/>
+        
+        
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -117,18 +117,17 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={handleCloseNavMenu} name =  {page.toLowerCase()}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component="div"
+            // href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -140,7 +139,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+           <img src="/assests/DAS_logo.png" alt="Logo" className='w-[40px]  xs:flex'/>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -148,7 +147,9 @@ function ResponsiveAppBar() {
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                name= {page.toLowerCase()}
               >
+                
                 {page}
               </Button>
             ))}

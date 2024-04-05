@@ -29,7 +29,7 @@ export default function Home() {
             });
 
             setDoctors(sdata);
-            console.log("-_______________________-", querySnapshot.docs)
+            // console.log("-___-", querySnapshot.docs);
         }
         doc();
     }, [])

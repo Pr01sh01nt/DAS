@@ -1,3 +1,4 @@
+import AppointmentForm from '@/components/AppointmentForm';
 import { UserAuth } from '@/context/AuthContext';
 import { db } from '@/lib/firebase/config';
 import { Avatar, Button, Typography } from '@mui/material';
@@ -8,8 +9,13 @@ const DoctorAppointment = ({ state }) => {
 
     const { user } = UserAuth();
     let [appointment, setAppointment] = useState([]);
-    console.log(state, "..", user);
+    const [formOpen, setFormOpen] = useState(false);
+    const [data, setData] = useState(null);
+    // console.log(state, "..", user);
 
+    const handleClick = () => {
+        setFormOpen(true);
+    }
 
     useEffect(() => {
 
@@ -28,74 +34,12 @@ const DoctorAppointment = ({ state }) => {
 
 
             setAppointment(sdata);
-            console.log("-_______________________-", querySnapshot.docs, sdata);
+            // console.log("-_____________-",  sdata);
         }
         doc();
 
     }, []);
 
-    const handleClick = async (data) => {
-
-
-        try {
-            if (data.patientCount === 0) {
-                alert("seat full");
-                throw "no seat available";
-            }
-            else {
-                console.log("run transaction");
-
-                const sfDocRef = doc(db, "appointments", data.docID);
-
-                const newCount = await runTransaction(db, async (transaction) => {
-                    const sfDoc = await transaction.get(sfDocRef);
-
-                    console.log("inside transaction block");
-                    if (!sfDoc.exists()) {
-                        throw new Error("Document does not exist!");
-                    }
-
-                    const nCount = sfDoc.data().patientCount - 1;
-                    if (nCount >= 0) {
-                        transaction.update(sfDocRef, { patientCount: nCount });
-                        return nCount;
-                    } else {
-                        return Promise.reject("Sorry! seat not avaialable");
-                    }
-
-                });
-
-                console.log("Seats decreased to ", newCount);
-                appointment = appointment.map((doc) => {
-                    if (doc.docID == data.docID)
-                        doc.patientCount = newCount;
-                    return doc;
-                });
-
-                setAppointment(appointment);
-
-                // make stripe integration here
-
-                // store the reciept in db
-                console.log("saving reciept");
-                const docRef = await addDoc(collection(db, "reciept"), {
-                    user: user.displayName,
-                    appointedDoctor: state.doctorName,
-                    startTime: data.startTime,
-                    endTime: data.endTime,
-                    fee: data.fee,
-                    uid : user.uid,
-                    timestampField: serverTimestamp()
-                });
-                console.log("reciept saved");
-
-            }
-
-
-        } catch (err) {
-            console.log(err);
-        }
-    }
 
 
     return (
@@ -167,7 +111,13 @@ const DoctorAppointment = ({ state }) => {
                     </div>
                     <div className='flex justify-center w-[50%]'>
 
-                        <Button variant="contained" className='bg-black' onClick={() => { handleClick(data) }}>Apply</Button>
+                        <Button
+                            variant="contained"
+                            className='bg-black'
+                            onClick={() => { setData(data); setFormOpen(true); }}
+                        >
+                            Apply
+                        </Button>
                     </div>
                     <br />
 
@@ -176,7 +126,12 @@ const DoctorAppointment = ({ state }) => {
 
             </div>
 
-            select the available time
+            {formOpen &&
+
+                <AppointmentForm setFormOpen={setFormOpen} data = {data} state={state}/>
+            }
+
+            {/* select the available time
             doctor have fixed number of patient checking in a particular shift
             so if the doctor is available then
             allow client to fill the form
@@ -188,7 +143,7 @@ const DoctorAppointment = ({ state }) => {
 
 
             CHALLANGE:
-            it should be real time
+            it should be real time */}
 
         </div>
     )

@@ -44,29 +44,29 @@ export default function SignUp({ setSignIn, role }) {
 
     try {
       event.preventDefault();
-      console.log(event.currentTarget, "$$");
+      // console.log(event.currentTarget, "$$");
       const data = new FormData(event.currentTarget);
 
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-      });
+      // console.log({
+      //   email: data.get('email'),
+      //   password: data.get('password'),
+      // });
 
       // signUp with email and password
-      console.log("signup with email and password runs");
+      // console.log("signup with email and password runs");
       const result = await signUp(data.get('email'), data.get('password'));
-      console.log(result, "sign up result");
+      // console.log(result, "sign up result");
 
 
-      console.log("upadate profile display name runs");
+      // console.log("upadate profile display name runs");
       await updateProfile(result.user, {
         displayName: `${data.get('firstName')} ${data.get('lastName')}`,
 
       });
 
-      console.log(data.get('displayImage') , "profileImage");
+      // console.log(data.get('displayImage') , "profileImage");
 
-      console.log('preparing for storaing profile image');
+      // console.log('preparing for storaing profile image');
       const storageRef = ref(storage, `image/${Date.now()}`);
       const uploadTask = uploadBytesResumable(storageRef, data.get('displayImage'));
 
@@ -94,7 +94,7 @@ export default function SignUp({ setSignIn, role }) {
           await getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
             //url is download url of file
             // setDownloadURL(url)
-            console.log(url);
+            // console.log(url);
 
 
             await setDoc(doc(db, "users", result.user.uid), {
@@ -105,12 +105,12 @@ export default function SignUp({ setSignIn, role }) {
               location : data.get('location'),
             });
 
-            console.log("navigate push going to run");
+            // console.log("navigate push going to run");
             navigate.push(`/${role}`);
             
-            console.log("sending mail");
+            // console.log("sending mail");
             await sendEmailVerification(result.user);
-            console.log("mail sent");
+            // console.log("mail sent");
             
 
           })
@@ -133,7 +133,7 @@ export default function SignUp({ setSignIn, role }) {
   const handleGoogleLogin = async () => {
     try {
       const result = await googleSignIn();
-      console.log(result, user, "google singin");
+      // console.log(result, user, "google singin");
 
       if (!result) throw Error("login failed");
 

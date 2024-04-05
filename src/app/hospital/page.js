@@ -12,7 +12,7 @@ export default function Home() {
       const { user, isLoading , role} = UserAuth();
 
       const handleClick = (event) => {
-            console.log(event.currentTarget.getAttribute("name"), "handle it");
+            // console.log(event.currentTarget.getAttribute("name"), "handle it");
             navigate.push(`/hospital/${event.currentTarget.getAttribute("name")}`);
       }
 

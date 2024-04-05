@@ -41,10 +41,10 @@ export default function SignIn({ setSignIn, role }) {
         try {
             event.preventDefault();
             const data = new FormData(event.currentTarget);
-            console.log({
-                email: data.get('email'),
-                password: data.get('password'),
-            });
+            // console.log({
+            //     email: data.get('email'),
+            //     password: data.get('password'),
+            // });
 
             await signIn(data.get('email'), data.get('password'));
 
@@ -61,7 +61,7 @@ export default function SignIn({ setSignIn, role }) {
     const handleGoogleLogin = async () => {
         try {
             const result = await googleSignIn();
-            console.log(result, user, "google singin");
+            // console.log(result, user, "google singin");
             if (!result) throw Error("login failed");
 
 
