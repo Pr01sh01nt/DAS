@@ -20,12 +20,12 @@ export default function Home() {
             <>
 
 
-                  <h1>Hospital home page</h1>
-                  <div className="border-2 flex flex-wrap justify-around max-w-full">
+
+                  <div className="flex flex-wrap justify-around max-w-full">
 
                         {doctorSpecialties.map(specialist => <div
                               key={specialist.type}
-                              className=" border-2 w-[300px] m-2 border-black cursor-pointer rounded p-2 max-w-[300px]"
+                              className="flex justify-center items-center border-2 w-[300px] m-2 border-black cursor-pointer rounded p-2 max-w-[300px] min-h-[200px]"
                               onClick={handleClick}
                               name={specialist.type}
                         >
@@ -39,19 +39,17 @@ export default function Home() {
 
                               </Typography>
 
-                              <Typography
+                              {/* <Typography
                                     variant="body1"
                                     component="p"
                                     align="justify"
                               >
-                                    {/* {specialist.details} */}
-
-                              </Typography>
+                              </Typography> */}
 
                         </div>)}
                   </div>
 
-                  <Link href="/hospital/addDoctor">
+                  <Link href="/hospital/addDoctor" className="flex justify-center">
                         <Button className="bg-[rgb(75,77,187)]" variant="contained">Add Doctors</Button>
                   </Link>
 

@@ -10,10 +10,10 @@ export default function Home() {
   const navigate = useRouter();
 
 
-  console.log("page renders");
-  const { googleSignIn, logOut } = UserAuth();
-  console.log(user, "user");
-  console.log(user?.login_hint, "login hint");
+  // console.log("page renders");
+  // const { googleSignIn, logOut } = UserAuth();
+  // console.log(user, "user");
+  // console.log(user?.login_hint, "login hint");
 
 
   return isLoading.current ? <h1>Loading......</h1> : !user ?

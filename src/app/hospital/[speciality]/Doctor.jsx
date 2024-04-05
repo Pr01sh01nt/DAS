@@ -74,7 +74,7 @@ const Doctor = ({ state }) => {
             >
                 <Box
                     component="div"
-                    className="w-[48%]"
+                    className="sm:w-[48%] mx-2"
                 >
 
 
@@ -89,11 +89,45 @@ const Doctor = ({ state }) => {
                             src =  {state.imageURL}
                         />
                     </Box>
-                    doctor details(dob, education, name, details)
+                  
+                  
+                    <Typography
+                        variant="h4"
+                        component="h4"
+                        align='center'
+                        className='font-semibold mt-2'
+                    >
+                        {state.doctorName}
+                    </Typography>
+
+                <div className='flex justify-between mb-2'>
+                    <span>DOB</span>
+                    <span className='font-medium'>{state.dob}</span>
+                </div>
+
+                <div className='flex justify-between mb-2'>
+                    <div className='w-[48%] font-medium'>
+                        {state.education}
+                    </div>
+                    <div className='font-medium'>
+                        {state.specialist}
+                    </div>
+                </div>
+
+                <Typography
+                    variant='body1'
+                    component="p"
+                    align='justify'
+                >
+                    {state.details}
+                </Typography>
 
                     
 
                 </Box>
+
+
+
 
                 <Box
 
