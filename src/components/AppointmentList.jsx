@@ -51,7 +51,12 @@ const AppointmentList = ({ id }) => {
 
     return (
         <>
-            <TableContainer sx={{ maxWidth: 650 }} component={Paper}>
+        {appointments?.length!==0 &&
+        
+        
+            <TableContainer sx={{ maxWidth: 650 }} component={Paper}
+                className="mb-4"
+            >
                 <Table sx={{ maxWidth: 650 }}>
                     <TableHead>
                         <TableRow className="font-bold ">
@@ -109,6 +114,7 @@ const AppointmentList = ({ id }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
+        }
         </>
     )
 }

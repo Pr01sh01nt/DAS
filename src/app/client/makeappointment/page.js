@@ -67,6 +67,10 @@ const MakeAppointment = () => {
 
   return (
     <>
+        <div
+            className='min-h-screen'
+        >
+
 
 
             <div className='flex justify-center'>
@@ -115,6 +119,8 @@ const MakeAppointment = () => {
 
 
             </Box>
+        </div>
+
     </>
   )
 }

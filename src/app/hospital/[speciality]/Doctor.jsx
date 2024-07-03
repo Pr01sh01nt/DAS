@@ -29,7 +29,7 @@ const Doctor = ({ state }) => {
                         amount: data.get('fee'), 
                     }
                 });
-                // console.log(res.data , "responses from stripe");
+                // console.log(res.data ,  "responses from stripe");
                 
                 // creating payment link
                 // console.log("creating payment link");
@@ -66,15 +66,18 @@ const Doctor = ({ state }) => {
 
     return (
         <>
+        <div
+            className='min-h-screen'
+        >
 
             <Box
                 component="div"
-                className="flex justify-around flex-col md:flex-row items-center md:items-start"
+                className="flex justify-around flex-col md:flex-row items-center md:items-start min-h-screen"
 
             >
                 <Box
                     component="div"
-                    className="sm:w-[48%] mx-2"
+                    className="sm:w-[48%] mx-2 p-2 border border-black rounded-lg"
                 >
 
 
@@ -101,7 +104,7 @@ const Doctor = ({ state }) => {
                     </Typography>
 
                 <div className='flex justify-between mb-2'>
-                    <span>DOB</span>
+                    <span>DOB : </span>
                     <span className='font-medium'>{state.dob}</span>
                 </div>
 
@@ -114,6 +117,15 @@ const Doctor = ({ state }) => {
                     </div>
                 </div>
 
+                <Typography
+                    variant='body1'
+                    component="div"
+                    align='justify'
+                    className=' font-semibold '
+                >
+                    {state.email}
+                </Typography>
+                
                 <Typography
                     variant='body1'
                     component="p"
@@ -207,6 +219,7 @@ const Doctor = ({ state }) => {
 
             <AppointmentList id={state.id}/>
            </Box>
+        </div>
         </>
     )
 }

@@ -43,9 +43,9 @@ const DoctorAppointment = ({ state }) => {
 
 
     return (
-        <div className='mx-4'>
-
-            <div className="flex flex-col items-center">
+        <div className='mx-4 min-h-screen'>
+                                                                                                                                    
+            <div className="flex flex-col items-center pt-2">
                 <div className="flex flex-col items-center">
 
                     <Avatar alt="image" sx={{ width: 100, height: 100 }} src={state.imageURL} />
@@ -68,7 +68,7 @@ const DoctorAppointment = ({ state }) => {
 
             </div>
 
-            <div className=''>
+            <div className='mt-12'>
 
                 <div className='flex justify-center font-bold text-[30px]'>
                     Appointments

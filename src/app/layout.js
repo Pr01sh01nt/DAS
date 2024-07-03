@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthContextProvider } from "@/context/AuthContext";
 import Navbar from '@/components/shared/Navbar'
+import Footer from "@/components/shared/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
 
           <Navbar/>
           {children}
+          <Footer/>
 
     </AuthContextProvider>
 

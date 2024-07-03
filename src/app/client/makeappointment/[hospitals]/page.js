@@ -44,6 +44,10 @@ export default function Home() {
 
     return !isLoading.current ? user ? !state ?
         <>
+        <div
+            className="min-h-screen"
+        >
+
             <div className="flex justify-center mt-5 w-full ">
 
                 <Typography
@@ -60,6 +64,8 @@ export default function Home() {
          
 
             <DoctorList setState={setState} doctors={doctors}/>
+        </div>
+
 
         </>
 

@@ -1,21 +1,34 @@
 "use client"
 
-import { Box, Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { doctorEducation, doctorSpecialties } from "@/constants";
 import { UserAuth } from "@/context/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "@/lib/firebase/config";
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import styled from "@emotion/styled";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
+
+const VisuallyHiddenInput = styled('input')({
+      opacity: 0,
+      // height: 1,
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      // whiteSpace: 'nowrap',
+      // width: 100,
+});
 
 
 export default function Home() {
       const { user, isLoading } = UserAuth();
-      
+
       const [specialist, setSpecialist] = useState('');
       const [docEducation, setDocEducation] = useState('');
       const [dob, setDOB] = useState(' ');
+      const [image, setImage] = useState(null);
 
       // console.log(user, "hostpf");
 
@@ -69,9 +82,10 @@ export default function Home() {
                                                 location: data.get('location'),
                                                 imageURL: imageURL,
                                                 details: data.get('details'),
-                        
+                                                email: data.get('email'),
+
                                           });
-                        
+
                                           // console.log("Document written with ID: ", docRef.id);
 
                                     })
@@ -82,7 +96,7 @@ export default function Home() {
 
 
 
-               
+
 
 
             }
@@ -109,16 +123,16 @@ export default function Home() {
                         onSubmit={handleSubmit}
                         // noValidate
                         sx={{ mt: 1 }}
-                        className="flex justify-center mt-5"
+                        className="flex justify-center mt-5  "
 
                   >
 
                         <Box
                               component="fieldset"
-                              className="max-w-[320px] "
+                              className="max-w-[320px] border border-black rounded-xl p-8"
                         >
                               <Typography
-                                    variant="h3"
+                                    variant="h4"
                                     className="h3"
                                     align="center"
                               >
@@ -208,6 +222,15 @@ export default function Home() {
                                     required
                                     fullWidth
                               />
+                              <TextField
+                                    type="email"
+                                    label="Doctor Email"
+                                    margin="normal"
+                                    name="email"
+                                    autoFocus
+                                    required
+                                    fullWidth
+                              />
 
 
 
@@ -223,7 +246,7 @@ export default function Home() {
                               />
 
 
-                              <InputLabel id="image-label">Add Doctor Image</InputLabel>
+                              {/* <InputLabel id="image-label">Add Doctor Image</InputLabel>
                               <TextField
                                     labelId="image-label"
                                     id="image"
@@ -236,10 +259,47 @@ export default function Home() {
                                     fullWidth
                                     required
                                     className="m-0"
-                              />
+                              /> */}
 
+                              <div
+                                    className='flex justify-center'
+                              >
+                                    {image &&
 
+                                          <Avatar
+                                                src={URL?.createObjectURL(image) || "#"}
+                                                alt="profile image"
+                                                sx={{
+                                                      height:120, width:120
+                                                }}
+                                          />
+                                    }
+                              </div>
 
+                              <div
+                                    className='flex justify-center py-2'
+                              >
+                                    <Button
+                                          className=' cursor-pointer bg-blue-500 shadow-lg shadow-blue-500/50 text-white font-bold hover:bg-blue-600'
+                                    >
+                                          <PersonAddAltIcon className=' text-white pr-2'
+                                                fontSize='large'
+                                                
+                                          />
+
+                                           Add Doctor Image
+
+                                          <VisuallyHiddenInput
+                                                name="image"
+                                                type="file"
+                                                id="image"
+                                                accept=".jpg, .jpeg, .png"
+                                                className='w-full h-full'
+                                                onChange={(e) => { setImage(e.target.files[0]) }}
+                                          />
+                                    </Button>
+
+                              </div>
 
                               <Button
                                     type="submit"

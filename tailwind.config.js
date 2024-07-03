@@ -8,6 +8,11 @@ module.exports = {
     
   theme: {
     extend: {
+      colors: {
+        'custom-blue': '#97ABE4',
+        'custom-green': '#9CC48E',
+      },
+
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -18,7 +23,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // require('@tailwindcss/typography'),
+  ],
 
   
 };

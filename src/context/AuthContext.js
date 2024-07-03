@@ -27,7 +27,7 @@ export const AuthContextProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const isLoading = useRef(true);
   const navigate = useRouter();
-
+  const [muser, setMuser] = useState({});
   
 
   const googleSignIn = async () => {
@@ -41,8 +41,11 @@ export const AuthContextProvider = ({ children }) => {
 
       // await signInWithPopup(auth, provider);
 
-      navigate.push("/");
       await signInWithRedirect(auth, provider);
+      const userCred = await getRedirectResult(auth);
+      console.log(userCred, "hi");
+      alert("e")
+      // navigate.push("/");
 
       isLoading.current = false;
 
@@ -63,6 +66,7 @@ export const AuthContextProvider = ({ children }) => {
   const logOut = () => {
     isLoading.current = true;
     signOut(auth);
+    setMuser({});
     isLoading.current = false;
   };
 
@@ -81,14 +85,15 @@ export const AuthContextProvider = ({ children }) => {
           // console.log(data, 'data');
           
           setRole(data.data().role);
+          setMuser(data.data());
         }
 
       } catch (err) {
 
         console.error(err);
       }
-      isLoading.current = false;
       setUser(currentUser);
+      isLoading.current = false;
 
     });
 
@@ -101,6 +106,7 @@ export const AuthContextProvider = ({ children }) => {
 
 
   const signUp = (email, password) => {
+    console.log(email, password)
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
@@ -112,9 +118,8 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <>
 
-      <AuthContext.Provider value={{ user, googleSignIn, logOut, signUp, signIn, isLoading, role, setRole }}>
+      <AuthContext.Provider value={{ user, googleSignIn, logOut, signUp, signIn, isLoading, role, setRole, muser }}>
         {children}
-
       </AuthContext.Provider>
 
     </>

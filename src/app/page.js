@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { UserAuth } from "../context/AuthContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Typography } from "@mui/material";
 
 export default function Home() {
   const { user, isLoading, role } = UserAuth();
@@ -18,25 +19,38 @@ export default function Home() {
 
   return isLoading.current ? <h1>Loading......</h1> : !user ?
 
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main className="min-h-screen bg-[url('/assests/doctorIllustraion.webp')] bg-no-repeat bg-scroll bg-cover">
       {/* hero page */}
-      <img
-        src="/assests/doctorIllustraion.webp" 
-        className="w-screen"
-        alt="doctorIllustration"
-      />
 
-    
-    
-      <div className="border-2 divide-slate-500 border-black">
+      <div
+        className="ml-16 pt-4  pl-2 w-[50vw]" 
+      >
 
-        i have black border
+        <Typography
+          variant="h3"
+          className=" pd-[10px] font-bold"
+        >
+          Book an Appointment with Any Doctor, Anytime, Anywhere
+        </Typography>
+
+        <Typography
+          variant="h6"
+          className="pt-[4px] pr-[4px]"
+        > 
+          Find and book appointments with the best doctors in the top hospitals near you
+        </Typography>
+
       </div>
+
+
+
+
+
 
     </main>
 
     :
     navigate.replace(`/${role}`);
-  
+
 
 }

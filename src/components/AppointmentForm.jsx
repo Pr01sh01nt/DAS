@@ -121,7 +121,7 @@ const AppointmentForm = ({ setFormOpen, data, state }) => {
     return (
         <>
 
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center ">
 
                 <div
                     className="fixed top-[70px] bg-[rgba(169,143,143,0.7)] rounded overflow-y-auto max-h-[85vh] backdrop-blur-lg min-w-[60%] md:min-w-[40%] mt-2"
@@ -239,7 +239,7 @@ const AppointmentForm = ({ setFormOpen, data, state }) => {
 
                             <TextField
                                 type="text"
-                                label="Deatils"
+                                label="Deatils of diseases"
                                 margin="normal"
                                 name="details"
                                 // autoFocus
@@ -274,4 +274,4 @@ const AppointmentForm = ({ setFormOpen, data, state }) => {
     )
 }
 
-export default AppointmentForm
+export default AppointmentForm;

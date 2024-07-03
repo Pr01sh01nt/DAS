@@ -25,7 +25,7 @@ const settings = ['Profile', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const {user, isLoading, logOut} = UserAuth();
+  const {muser, isLoading, logOut} = UserAuth();
   const navigate = useRouter();
 
   
@@ -66,6 +66,10 @@ function ResponsiveAppBar() {
       logOut();
       
     }
+    else if(setting == "Profile")
+      {
+        navigate.push("/profile");
+      }
 
 
 
@@ -164,7 +168,7 @@ function ResponsiveAppBar() {
             <>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={user.photoURL} />
+                <Avatar alt="Remy Sharp" src={muser.imageURL} />
               </IconButton>
             </Tooltip>   
           <Menu

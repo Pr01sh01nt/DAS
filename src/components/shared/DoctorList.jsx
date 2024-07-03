@@ -82,6 +82,14 @@ const DoctorList = ({setState , doctors}) => {
                             </div>
 
                             <div className="flex justify-between">
+                                <span>Email</span>
+                                <span>
+
+                                    {doctor.email}
+
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
                                 <span>Location</span>
                                 <span>
 

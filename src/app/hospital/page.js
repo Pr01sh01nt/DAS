@@ -23,34 +23,40 @@ export default function Home() {
 
                   <div className="flex flex-wrap justify-around max-w-full">
 
-                        {doctorSpecialties.map(specialist => <div
-                              key={specialist.type}
-                              className="flex justify-center items-center border-2 w-[300px] m-2 border-black cursor-pointer rounded p-2 max-w-[300px] min-h-[200px]"
-                              onClick={handleClick}
-                              name={specialist.type}
-                        >
-
-                              <Typography
-                                    variant="h5"
-                                    component="h5"
-                                    align="center"
+                        {doctorSpecialties.map(specialist =>
+                              <div
+                                    key={specialist.type}
+                                    className={`flex justify-center items-center border-2 w-[300px] m-2 border-black  font-bold  cursor-pointer rounded p-2 max-w-[200px] min-h-[100px]`}
+                                    onClick={handleClick}
+                                    name={specialist.type}
                               >
-                                    {specialist.type}
 
-                              </Typography>
+                                    <Typography
+                                          variant="h5"
+                                          component="h5"
+                                          align="center"
+                                    >
+                                          {specialist.type}
 
-                              {/* <Typography
+                                    </Typography>
+
+                                    {/* <Typography
                                     variant="body1"
                                     component="p"
                                     align="justify"
                               >
                               </Typography> */}
 
-                        </div>)}
+                              </div>)}
                   </div>
 
                   <Link href="/hospital/addDoctor" className="flex justify-center">
-                        <Button className="bg-[rgb(75,77,187)]" variant="contained">Add Doctors</Button>
+                        <Button
+                              className="bg-[rgb(75,77,187)] pd-4"
+                              variant="contained"
+                        >
+                              Add Doctors
+                        </Button>
                   </Link>
 
 

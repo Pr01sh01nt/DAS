@@ -6,7 +6,7 @@ import { db } from '@/lib/firebase/config';
 import { useRouter } from 'next/navigation';
 import { UserAuth } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,  Tooltip } from "@mui/material";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,  Tooltip, Typography } from "@mui/material";
 
 
 const Demo = styled('div')(({ theme }) => ({
@@ -60,9 +60,11 @@ export default function Home() {
 
     return !isLoading.current ? role === "client" ? user ?
         <>
-        <div className="flex flex-col items-center">
-            <h1 className='text-[35px] font-bold mb-5 mt-2'>My Appontments</h1>
+        <div className="flex flex-col items-center min-h-screen">
+            <h1 className='text-[35px] font-bold mb-5 mt-2'>My Appointments</h1>
 
+        {myAppointments.length!==0 ?
+        
             <TableContainer sx={{ maxWidth: 650 }} component={Paper}>
                 <Table sx={{ maxWidth: 650 }}>
                     <TableHead>
@@ -93,15 +95,21 @@ export default function Home() {
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer> : 
+            <Typography
+                    variant='h6'
+            >
+                No Appointments Made
+            </Typography>
+        }
 
 
             <Button
                 onClick={()=>{navigate.push('/client/makeappointment')}}
                 sx={{mt:5}}
-                className='bg-[rgba(102,145,65,0.77)] font-bold'
-            >
-                Make Appontments
+                className='text-white bg-gradient-to-b from-[rgba(0,255,242,0.84)] to-[rgba(0,4,255,0.88)] hover:to-blue-500 w-fit shadow-xl shadow-[rgba(114,152,255,0.62)]'
+                >
+                Book an Appointment
 
             </Button>
         </div>
