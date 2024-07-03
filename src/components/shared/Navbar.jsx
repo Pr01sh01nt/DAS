@@ -25,7 +25,7 @@ const settings = ['Profile', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const {muser, isLoading, logOut} = UserAuth();
+  const {muser, isLoading, logOut, user} = UserAuth();
   const navigate = useRouter();
 
   

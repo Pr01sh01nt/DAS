@@ -39,13 +39,13 @@ export const AuthContextProvider = ({ children }) => {
       const provider = new GoogleAuthProvider();
 
 
-      // await signInWithPopup(auth, provider);
+      await signInWithPopup(auth, provider);
 
-      await signInWithRedirect(auth, provider);
-      const userCred = await getRedirectResult(auth);
-      console.log(userCred, "hi");
-      alert("e")
-      // navigate.push("/");
+      // await signInWithRedirect(auth, provider);
+      // const userCred = await getRedirectResult(auth);
+      // console.log(userCred, "hi");
+      // alert("e")
+      navigate.push("/");
 
       isLoading.current = false;
 
